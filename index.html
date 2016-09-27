@@ -14,7 +14,7 @@
     </form>
         <script>
             var conn = new WebSocket('ws://localhost:8080');
-//            var conn = new WebSocket('ws://172.30.50.51:8080');
+            var rString = guid();
 
             conn.onopen = function(e) {
                 console.log("Connection established!");
@@ -24,7 +24,6 @@
                 console.log(e.data);
 
                 $(function () {
-                    var rString = '"' + guid() + '"';
                     $('#mesej').append("<p data-id=" + rString + ">" + JSON.parse(e.data).text + "</p>");
                     document.getElementById("text").value = "";
                 })
@@ -37,7 +36,7 @@
                 var msg = {
                     type: "message",
                     text: document.getElementById("text").value,
-                    id:   "clientID",
+                    id:   rString,
                     date: Date.now()
                 };
 
