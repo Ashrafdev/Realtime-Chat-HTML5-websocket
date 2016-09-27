@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>Example html5 websocket</title>
+</head>
+    <body>
+    <b>Underground Messenger</b>
+    <br>
+    <div id="mesej"></div>
+    <form action="#" onsubmit="sendText(event)">
+        <input type="text" id="text" value="" placeholder="SEND">
+    </form>
+        <script>
+            var conn = new WebSocket('ws://localhost:8080');
+//            var conn = new WebSocket('ws://172.30.50.51:8080');
+
+            conn.onopen = function(e) {
+                console.log("Connection established!");
+            };
+
+            conn.onmessage = function(e) {
+                console.log(e.data);
+
+                $(function () {
+                    var rString = '"' + guid() + '"';
+                    $('#mesej').append("<p data-id=" + rString + ">" + JSON.parse(e.data).text + "</p>");
+                    document.getElementById("text").value = "";
+                })
+
+            };
+
+            function sendText(event) {
+
+                event.preventDefault();
+                var msg = {
+                    type: "message",
+                    text: document.getElementById("text").value,
+                    id:   "clientID",
+                    date: Date.now()
+                };
+
+                conn.send(JSON.stringify(msg));
+            }
+
+            function guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+                }
+
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                        s4() + '-' + s4() + s4() + s4();
+            }
+
+        </script>
+    </body>
+</html>
