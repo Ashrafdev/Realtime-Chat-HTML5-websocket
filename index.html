@@ -21,7 +21,8 @@
             };
 
             conn.onmessage = function(e) {
-                console.log(e.data);
+                var j = JSON.parse(e.data).date;
+                console.log(new Date(j));
 
                 $(function () {
                     $('#mesej').append("<p data-id=" + rString + ">" + JSON.parse(e.data).text + "</p>");
